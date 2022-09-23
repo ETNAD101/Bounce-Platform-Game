@@ -1,0 +1,149 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "Debug compile",
+            "command": "C:\\mingw64\\bin\\g++.exe",
+            "args": [
+                "-c",
+				"${workspaceFolder}\\src\\*.cpp",
+				"-std=c++17",
+				"-g",
+				"-Wall",
+				"-m64",
+				"-I",
+				"${workspaceFolder}\\include",
+				"-I",
+				"H:\\dante\\Code\\Development\\SDL2\\SDL2-w64\\include"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+		{
+            "type": "shell",
+            "label": "Debug link",
+            "command": "C:\\mingw64\\bin\\g++.exe",
+            "args": [
+                "*.o",
+				"-o",
+				"${workspaceFolder}\\bin\\debug\\main",
+				"-L",
+				"H:\\dante\\Code\\Development\\SDL2\\SDL2-w64\\lib",
+				"-lmingw32",
+				"-lSDL2main",
+				"-lSDL2",
+				"-lSDL2_image",
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+
+        },
+        {
+            "type": "shell",
+            "label": "Debug run",
+            "command": "start",
+			"args": [
+                "${workspaceFolder}\\bin\\debug\\main.exe"
+            ]
+         },
+         {
+            "type": "shell",
+            "label": "Release compile",
+            "command": "C:\\mingw64\\bin\\g++.exe",
+            "args": [
+                "-c",
+				"${workspaceFolder}\\src\\*.cpp",
+				"-std=c++17",
+				"-O3",
+				"-Wall",
+				"-m64",
+				"-I",
+				"${workspaceFolder}\\include",
+				"-I",
+				"H:\\dante\\Code\\Development\\SDL2\\SDL2-w64\\include"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+		{
+            "type": "shell",
+            "label": "Release link",
+            "command": "C:\\mingw64\\bin\\g++.exe",
+            "args": [
+                "*.o",
+				"-o",
+				"${workspaceFolder}\\bin\\release\\Flappy Bird",
+				"-L",
+				"H:\\dante\\Code\\Development\\SDL2\\SDL2-w64\\lib",
+				"-lmingw32",
+                "-mwindows",
+                "-static-libstdc++",
+                "-static-libgcc",
+				"-lSDL2main",
+				"-lSDL2",
+				"-lSDL2_image",
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+
+        },
+        {
+            "type": "shell",
+            "label": "Release run",
+            "command": "start",
+			"args": [
+                "${workspaceFolder}\\bin\\release\\Flappy Bird.exe"
+            ]
+         },
+         {
+            "type": "shell",
+            "label": "cleanup",
+            "command": "rm",
+            "args": [
+                "*.o",
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+
+        },
+        {
+            "label": "Debug",
+            "dependsOn": ["Debug compile", "Debug link", "cleanup", "Debug run"],
+            "dependsOrder": "sequence",
+			"group": {
+				"kind": "test",
+                "isDefault": true
+			}
+         },
+         {
+            "label": "Release",
+            "dependsOn": ["Release compile", "Release link", "cleanup", "Release run"],
+            "dependsOrder": "sequence",
+			"group": {
+				"kind": "build",
+                "isDefault": true
+			}
+         }
+    ]
+}
