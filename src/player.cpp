@@ -71,7 +71,7 @@ void Player::update(double deltaTime, bool mouseDown, bool mousePressed)
         SDL_GetMouseState(&mouseX, &mouseY);
         setVelocity(getLaunch(initialMousePos, Vector2f(mouseX, mouseY)));
 
-        velocity = velocity / 100;
+        velocity = velocity / 300;
         velocity.x *= deltaTime;
         velocity.y *= deltaTime;
     }
@@ -95,17 +95,11 @@ void Player::update(double deltaTime, bool mouseDown, bool mousePressed)
             velocity.y = velocity.y + GRAVITY * deltaTime;
         }
         else{
-            velocity.y = 0;
+            velocity.y *= -0.5;
+            velocity.x *= 0.3;
         }
 
         setPos(getPos() + velocity);
-        if (velocity.x >= 0)
-        {
-            velocity.x -= FRICTION * deltaTime;
-        }
-        else{
-            velocity.x = 0;
-        }
         velocity.print();
     }
 }

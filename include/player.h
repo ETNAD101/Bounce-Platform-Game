@@ -20,7 +20,7 @@ public:
     bool checkColided(Entity& p_target);
     void update(double deltaTime, bool mouseDown, bool mousePressed);
 private:
-    const float GRAVITY = 0.03;
+    const float GRAVITY = 0.01;
     const float FRICTION = 0.03;
     Vector2f velocity;
     Vector2f initialMousePos;
