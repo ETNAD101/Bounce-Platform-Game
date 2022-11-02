@@ -5,8 +5,11 @@
 
 #include <iostream>
 #include <cmath>
+#include <vector>
 #include "entity.h"
+#include "platform.h"
 #include "math.h"
+#include "def.h"
 
 class Player : public Entity
 {
@@ -17,8 +20,9 @@ public:
     Vector2f getLaunch(Vector2f a, Vector2f b);
     void setVelocity(Vector2f p_vel);
     void setInitialMousePos(Vector2f p_pos);
-    bool checkColided(Entity& p_target);
-    void update(double deltaTime, bool mouseDown, bool mousePressed);
+    int checkCollided(Entity& p_target);
+    void bounce(int dir);
+    void update(double deltaTime, bool mouseDown, bool mousePressed, std::vector<Platform>& platforms);
 private:
     const float GRAVITY = 0.01;
     const float FRICTION = 0.03;

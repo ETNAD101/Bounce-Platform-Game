@@ -8,6 +8,7 @@
 #include "math.h"
 #include "entity.h"
 #include "player.h"
+#include "platform.h"
 #include "settings.h"
 
 Uint64 NOW = SDL_GetPerformanceCounter();
@@ -17,6 +18,14 @@ double deltaTime = 0;
 RenderWindow window(TITLE, WIDTH, HEIGHT);
 
 Player player(Vector2f(WIDTH/4 - 8, HEIGHT/4 - 16), window.loadTexture(PLAYER_PATH));
+
+std::vector<Platform> platforms = 
+{
+    Platform(Vector2f(0, 0), window.loadTexture(DEBUG_PATH), Vector2f(32, 16)),
+    Platform(Vector2f(50, 50), window.loadTexture(DEBUG_PATH), Vector2f(16, 16)),
+    Platform(Vector2f(30, 150), window.loadTexture(DEBUG_PATH), Vector2f(32, 16)),
+
+};
 
 SDL_Event event;
 
@@ -80,7 +89,7 @@ void update()
     NOW = SDL_GetPerformanceCounter();
     deltaTime = (double)((NOW - LAST)*1000 / (double)SDL_GetPerformanceFrequency());
 
-    player.update(deltaTime, mouseDown, mousePressed);
+    player.update(deltaTime, mouseDown, mousePressed, platforms);
 
 }
 
@@ -90,6 +99,10 @@ void graphics()
     window.clear();
 
     /**Rendering**/
+    for(Platform p : platforms)
+    {
+        window.render(p);
+    }
     window.render(player);
     window.display();
 }

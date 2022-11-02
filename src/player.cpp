@@ -3,9 +3,12 @@
 
 #include <iostream>
 #include <cmath>
+#include <vector>
 #include "player.h"
 #include "entity.h"
+#include "platform.h"
 #include "math.h"
+#include "def.h"
 
 Player::Player(Vector2f p_pos, SDL_Texture* p_tex)
     :Entity(p_pos, p_tex) 
@@ -15,6 +18,7 @@ Player::Player(Vector2f p_pos, SDL_Texture* p_tex)
     rect.y = 0;
     rect.w = 16;
     rect.h = 16;
+    canMove = true;
     this->setCurrentFrame(rect);
 }
 
@@ -46,21 +50,44 @@ void Player::setInitialMousePos(Vector2f p_pos)
     initialMousePos = p_pos;
 }
 
-bool Player::checkColided(Entity& p_target)
+int Player::checkCollided(Entity& p_target)
 {
-    if (this->getPos().x + this->getCurrentFrame().w >= p_target.getPos().x &&    
-        this->getPos().x <= p_target.getPos().x + p_target.getCurrentFrame().w && 
-        this->getPos().y + this->getCurrentFrame().h >= p_target.getPos().y &&    
-        this->getPos().y <= p_target.getPos().y + p_target.getCurrentFrame().h)
-    { 
-        return true;
-    }
-    return false;
+    // Top
+    if(getPos().y + velocity.y < p_target.getPos().y + p_target.getCurrentFrame().h && 
+       getPos().x + velocity.x < p_target.getPos().x + p_target.getCurrentFrame().w &&
+       getPos().x + getCurrentFrame().w + velocity.x > p_target.getPos().x && 
+       getPos().y + getCurrentFrame().h + velocity.y > p_target.getPos().y + p_target.getCurrentFrame().h
+       ) {
+        std::cout << "Top Hit\n";
+        return TOP;
+       }
+
+    // Bottom
+    if(getPos().y + velocity.y < p_target.getPos().y + p_target.getCurrentFrame().h && 
+       getPos().x + velocity.x < p_target.getPos().x + p_target.getCurrentFrame().w &&
+       getPos().x + getCurrentFrame().w + velocity.x > p_target.getPos().x && 
+       getPos().y + getCurrentFrame().h + velocity.y > p_target.getPos().y
+       ) {
+        std::cout << "Bottom Hit\n";
+        return BOTTOM;
+       }
+       return 0;
 }
 
-void Player::update(double deltaTime, bool mouseDown, bool mousePressed)
+void Player::bounce(int dir) {
+    if(dir == 1) {
+        velocity.y *= -1;
+    }
+    if(dir == 2) {
+        velocity.y *= -0.7;
+        velocity.x *= 0.3;
+    }
+}
+
+void Player::update(double deltaTime, bool mouseDown, bool mousePressed, std::vector<Platform>& platforms)
 {   
     int mouseX, mouseY;
+    int collisionDir;
     if(mouseDown)
     {
         if(mousePressed)
@@ -68,15 +95,21 @@ void Player::update(double deltaTime, bool mouseDown, bool mousePressed)
             SDL_GetMouseState(&mouseX, &mouseY);
             setInitialMousePos(Vector2f(mouseX, mouseY));
         }
-        SDL_GetMouseState(&mouseX, &mouseY);
+        SDL_GetMouseState(&mouseX, &mouseY); 
         setVelocity(getLaunch(initialMousePos, Vector2f(mouseX, mouseY)));
-
+        
         velocity = velocity / 300;
         velocity.x *= deltaTime;
         velocity.y *= deltaTime;
     }
     else
     {
+        for(Platform p : platforms)
+        {
+            collisionDir = checkCollided(p);
+            bounce(collisionDir);
+        }
+
         if(getPos().y < 339 - velocity.y)
         {
             grounded = false;
@@ -95,11 +128,10 @@ void Player::update(double deltaTime, bool mouseDown, bool mousePressed)
             velocity.y = velocity.y + GRAVITY * deltaTime;
         }
         else{
-            velocity.y *= -0.5;
+            velocity.y *= -0.7;
             velocity.x *= 0.3;
         }
 
         setPos(getPos() + velocity);
-        velocity.print();
-    }
+    }  
 }

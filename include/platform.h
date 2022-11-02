@@ -11,6 +11,6 @@
 class Platform : public Entity
 {
 public:
-    Platform(Vector2f p_pos, SDL_Texture* p_tex);
+    Platform(Vector2f p_pos, SDL_Texture* p_tex, Vector2f size);
     void update(double& p_deltaTime);
 };
