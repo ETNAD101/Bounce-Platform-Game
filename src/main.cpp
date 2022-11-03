@@ -24,9 +24,8 @@ Player player(Vector2f(WIDTH/4 - 8, HEIGHT/4 - 16), window.loadTexture(PLAYER_PA
 /** Create platforms**/
 std::vector<Platform> platforms = 
 {
-    Platform(Vector2f(0, 0), window.loadTexture(DEBUG_PATH), Vector2f(32, 16)),
-    Platform(Vector2f(50, 50), window.loadTexture(DEBUG_PATH), Vector2f(16, 16)),
-    Platform(Vector2f(30, 150), window.loadTexture(DEBUG_PATH), Vector2f(32, 16)),
+    Platform(Vector2f(50, 40), window.loadTexture(DEBUG_PATH), Vector2f(16, 72)),
+    Platform(Vector2f(0, 150), window.loadTexture(DEBUG_PATH), Vector2f(72, 16)),
 
 };
 

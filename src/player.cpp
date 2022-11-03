@@ -54,25 +54,44 @@ void Player::setInitialMousePos(Vector2f p_pos)
 int Player::checkCollided(Entity& p_target)
 {
     // Top
-    if(getPos().y + velocity.y < p_target.getPos().y + p_target.getCurrentFrame().h && 
+    if(getPos().y + velocity.y <= p_target.getPos().y + p_target.getCurrentFrame().h && 
        getPos().x + velocity.x < p_target.getPos().x + p_target.getCurrentFrame().w &&
        getPos().x + getCurrentFrame().w + velocity.x > p_target.getPos().x && 
-       getPos().y + getCurrentFrame().h + velocity.y > p_target.getPos().y + p_target.getCurrentFrame().h
+       getPos().y + getCurrentFrame().h + velocity.y >= p_target.getPos().y + p_target.getCurrentFrame().h
        ) {
         std::cout << "Top Hit\n";
         return TOP;
-       }
+    }
 
     // Bottom
-    if(getPos().y + velocity.y < p_target.getPos().y + p_target.getCurrentFrame().h && 
+    if(getPos().y + velocity.y <= p_target.getPos().y + p_target.getCurrentFrame().h && 
        getPos().x + velocity.x < p_target.getPos().x + p_target.getCurrentFrame().w &&
        getPos().x + getCurrentFrame().w + velocity.x > p_target.getPos().x && 
-       getPos().y + getCurrentFrame().h + velocity.y > p_target.getPos().y
+       getPos().y + getCurrentFrame().h + velocity.y >= p_target.getPos().y ||
+       getPos().y + velocity.y >= 339
        ) {
         std::cout << "Bottom Hit\n";
+        grounded = true;
         return BOTTOM;
-       }
-       return 0;
+    }
+
+    // Left
+    if(getPos().x + velocity.x < p_target.getPos().x + p_target.getCurrentFrame().w &&
+       getPos().y + velocity.y < p_target.getPos().y + p_target.getCurrentFrame().h &&
+       getPos().y + getCurrentFrame().h + velocity.y > p_target.getPos().y &&
+       getPos().x + getCurrentFrame().w + velocity.x > p_target.getPos().x + p_target.getCurrentFrame().x
+       ) {
+        std::cout << "Left hit\n";
+        return LEFT;
+    }
+
+    /**checks if player collided with the edge of the screen**/
+    if(getPos().x + velocity.x <= 0 || getPos().x + velocity.x >= 184 )
+    {
+        return LEFT;
+    }
+
+    return 0;
 }
 
 /**changes velocity depending on what collieded**/
@@ -83,6 +102,9 @@ void Player::bounce(int dir) {
     if(dir == 2) {
         velocity.y *= -0.7;
         velocity.x *= 0.3;
+    }
+    if(dir > 2) {
+        velocity.x *= -0.9;
     }
 }
 
@@ -116,28 +138,16 @@ void Player::update(double deltaTime, bool mouseDown, bool mousePressed, std::ve
         }
 
         /**Checks if player is on the ground**/
-        if(getPos().y < 339 - velocity.y)
-        {
+        if(collisionDir != 2) {
             grounded = false;
         }
-        else{
-            grounded = true;
-        }
 
-        /**checks if player collided with the edge of the screen**/
-        if(getPos().x + velocity.x <= 0 || getPos().x + velocity.x >= 184 )
-        {
-            velocity.x *= -1;
-        }
+       
 
         /**Gravity and friction**/
         if(!grounded)
         {
             velocity.y = velocity.y + GRAVITY * deltaTime;
-        }
-        else{
-            velocity.y *= -0.7;
-            velocity.x *= 0.3;
         }
         
         /**Update position every frame**/
