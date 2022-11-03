@@ -11,14 +11,17 @@
 #include "platform.h"
 #include "settings.h"
 
+/**Delta time variables**/ 
 Uint64 NOW = SDL_GetPerformanceCounter();
 Uint64 LAST = 0;
 double deltaTime = 0;
 
+/**Create window and player**/
 RenderWindow window(TITLE, WIDTH, HEIGHT);
 
 Player player(Vector2f(WIDTH/4 - 8, HEIGHT/4 - 16), window.loadTexture(PLAYER_PATH));
 
+/** Create platforms**/
 std::vector<Platform> platforms = 
 {
     Platform(Vector2f(0, 0), window.loadTexture(DEBUG_PATH), Vector2f(32, 16)),
@@ -85,6 +88,7 @@ void events()
 
 void update()
 {
+    /**Calculates delta time**/
     LAST = NOW;
     NOW = SDL_GetPerformanceCounter();
     deltaTime = (double)((NOW - LAST)*1000 / (double)SDL_GetPerformanceFrequency());

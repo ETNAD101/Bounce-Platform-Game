@@ -32,13 +32,13 @@ Vector2f Player::getInitialMousePos()
     return initialMousePos;
 }
 
+/**Calculates velocity based on how far the mouse was dragged**/
 Vector2f Player::getLaunch(Vector2f a, Vector2f b)
 {   
     float x = (b.x - a.x) * -1;
     float y = (b.y - a.y) * -1;
     return Vector2f(x, y);
 }
-
 
 void Player::setVelocity(Vector2f p_vel)
 {
@@ -50,6 +50,7 @@ void Player::setInitialMousePos(Vector2f p_pos)
     initialMousePos = p_pos;
 }
 
+/**Checks collisions for each side individualy*/
 int Player::checkCollided(Entity& p_target)
 {
     // Top
@@ -74,6 +75,7 @@ int Player::checkCollided(Entity& p_target)
        return 0;
 }
 
+/**changes velocity depending on what collieded**/
 void Player::bounce(int dir) {
     if(dir == 1) {
         velocity.y *= -1;
@@ -84,12 +86,14 @@ void Player::bounce(int dir) {
     }
 }
 
+/**Main player update loop**/
 void Player::update(double deltaTime, bool mouseDown, bool mousePressed, std::vector<Platform>& platforms)
 {   
     int mouseX, mouseY;
     int collisionDir;
     if(mouseDown)
     {
+        /**Measure player launch velocity**/
         if(mousePressed)
         {
             SDL_GetMouseState(&mouseX, &mouseY);
@@ -104,12 +108,14 @@ void Player::update(double deltaTime, bool mouseDown, bool mousePressed, std::ve
     }
     else
     {
+        /**Check if player collided with any platform**/
         for(Platform p : platforms)
         {
             collisionDir = checkCollided(p);
             bounce(collisionDir);
         }
 
+        /**Checks if player is on the ground**/
         if(getPos().y < 339 - velocity.y)
         {
             grounded = false;
@@ -118,11 +124,13 @@ void Player::update(double deltaTime, bool mouseDown, bool mousePressed, std::ve
             grounded = true;
         }
 
+        /**checks if player collided with the edge of the screen**/
         if(getPos().x + velocity.x <= 0 || getPos().x + velocity.x >= 184 )
         {
             velocity.x *= -1;
         }
 
+        /**Gravity and friction**/
         if(!grounded)
         {
             velocity.y = velocity.y + GRAVITY * deltaTime;
@@ -131,7 +139,8 @@ void Player::update(double deltaTime, bool mouseDown, bool mousePressed, std::ve
             velocity.y *= -0.7;
             velocity.x *= 0.3;
         }
-
+        
+        /**Update position every frame**/
         setPos(getPos() + velocity);
     }  
 }

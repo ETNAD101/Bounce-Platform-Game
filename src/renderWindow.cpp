@@ -4,6 +4,7 @@
 #include <iostream>
 #include "renderWindow.h"
 
+/**Constructor creates SDL window and Renderer objects**/
 RenderWindow::RenderWindow(const char* p_title, int p_w, int p_h) 
     :window(NULL), renderer(NULL)
 {
@@ -18,6 +19,7 @@ RenderWindow::RenderWindow(const char* p_title, int p_w, int p_h)
         std::cout << "Renderer failed to init. Error: " << SDL_GetError() << std::endl;
 }
 
+/**Creates SDL texture from an image**/
 SDL_Texture* RenderWindow::loadTexture(const char* p_filePath)
 {
     SDL_Texture* texture = NULL;
@@ -34,17 +36,20 @@ void RenderWindow::cleanUp()
     SDL_DestroyWindow(window);
 }
 
+/**Clears the screen/renderer and sets background colour**/
 void RenderWindow::clear()
 {
     SDL_RenderClear(renderer);
     SDL_SetRenderDrawColor(renderer, 135, 206, 235, 255);
 }
 
+/**Sets background to a texture/image**/
 void RenderWindow::background(SDL_Texture* p_img)
 {
     SDL_RenderCopy(renderer, p_img, NULL, NULL);
 }
 
+/**Draws an entity to the screen**/
 void RenderWindow::render(Entity& p_e)
 {
     SDL_Rect src;
@@ -62,6 +67,7 @@ void RenderWindow::render(Entity& p_e)
     SDL_RenderCopy(renderer, p_e.getTex(), &src, &dst);
 }
 
+/**Renders the renderer**/
 void RenderWindow::display()
 {
     SDL_RenderPresent(renderer);
