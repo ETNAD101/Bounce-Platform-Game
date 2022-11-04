@@ -54,20 +54,21 @@ void Player::setInitialMousePos(Vector2f p_pos)
 int Player::checkCollided(Entity& p_target)
 {
     // Top
-    if(getPos().y + velocity.y <= p_target.getPos().y + p_target.getCurrentFrame().h && 
+    if((getPos().y + velocity.y < p_target.getPos().y + p_target.getCurrentFrame().h && 
        getPos().x + velocity.x < p_target.getPos().x + p_target.getCurrentFrame().w &&
-       getPos().x + getCurrentFrame().w + velocity.x > p_target.getPos().x && 
-       getPos().y + getCurrentFrame().h + velocity.y >= p_target.getPos().y + p_target.getCurrentFrame().h
+       getPos().x + getCurrentFrame().w + velocity.x > p_target.getPos().x &&
+       getPos().y + getCurrentFrame().h + velocity.y > p_target.getPos().y + p_target.getCurrentFrame().h) ||
+       getPos().y + velocity.y < 0
        ) {
         std::cout << "Top Hit\n";
         return TOP;
     }
 
     // Bottom
-    if(getPos().y + velocity.y <= p_target.getPos().y + p_target.getCurrentFrame().h && 
+    if((getPos().y + velocity.y < p_target.getPos().y && 
        getPos().x + velocity.x < p_target.getPos().x + p_target.getCurrentFrame().w &&
        getPos().x + getCurrentFrame().w + velocity.x > p_target.getPos().x && 
-       getPos().y + getCurrentFrame().h + velocity.y >= p_target.getPos().y ||
+       getPos().y + getCurrentFrame().h + velocity.y > p_target.getPos().y) ||
        getPos().y + velocity.y >= 339
        ) {
         std::cout << "Bottom Hit\n";
@@ -76,20 +77,26 @@ int Player::checkCollided(Entity& p_target)
     }
 
     // Left
-    if(getPos().x + velocity.x < p_target.getPos().x + p_target.getCurrentFrame().w &&
+    if((getPos().x + velocity.x < p_target.getPos().x + p_target.getCurrentFrame().w &&
        getPos().y + velocity.y < p_target.getPos().y + p_target.getCurrentFrame().h &&
        getPos().y + getCurrentFrame().h + velocity.y > p_target.getPos().y &&
-       getPos().x + getCurrentFrame().w + velocity.x > p_target.getPos().x + p_target.getCurrentFrame().x
+       getPos().x + getCurrentFrame().w + velocity.x > p_target.getPos().x + p_target.getCurrentFrame().x) ||
+       getPos().x + velocity.x < 0
        ) {
         std::cout << "Left hit\n";
         return LEFT;
     }
 
-    /**checks if player collided with the edge of the screen**/
-    if(getPos().x + velocity.x <= 0 || getPos().x + velocity.x >= 184 )
-    {
-        return LEFT;
-    }
+    // Right
+    if((getPos().x + p_target.getCurrentFrame().w + velocity.x > p_target.getPos().x &&
+       getPos().x + velocity.x < p_target.getPos().x &&
+       getPos().y + velocity.y < p_target.getPos().y + p_target.getCurrentFrame().h &&
+       getPos().y + getCurrentFrame().h + velocity.y > p_target.getPos().y) ||
+       getPos().x + velocity.x >= 184  
+       ) {
+        std::cout << "Right hit\n";
+        return RIGHT;
+       }
 
     return 0;
 }
@@ -140,9 +147,7 @@ void Player::update(double deltaTime, bool mouseDown, bool mousePressed, std::ve
         /**Checks if player is on the ground**/
         if(collisionDir != 2) {
             grounded = false;
-        }
-
-       
+        } 
 
         /**Gravity and friction**/
         if(!grounded)
@@ -151,6 +156,15 @@ void Player::update(double deltaTime, bool mouseDown, bool mousePressed, std::ve
         }
         
         /**Update position every frame**/
+        velocity.print();
         setPos(getPos() + velocity);
+
+        if(abs(velocity.y) < 0.05) {
+            velocity.y = 0;
+        }
+
+        if(abs(velocity.x) < 0.05) {
+            velocity.x = 0;
+        }
     }  
 }

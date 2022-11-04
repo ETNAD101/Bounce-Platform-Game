@@ -85,7 +85,7 @@
             "args": [
                 "*.o",
 				"-o",
-				"${workspaceFolder}\\bin\\release\\Flappy Bird",
+				"${workspaceFolder}\\bin\\release\\Bounce-Game",
 				"-L",
 				"H:\\dante\\Code\\Development\\SDL2\\SDL2-w64\\lib",
 				"-lmingw32",
@@ -109,7 +109,7 @@
             "label": "Release run",
             "command": "start",
 			"args": [
-                "${workspaceFolder}\\bin\\release\\Flappy Bird.exe"
+                "${workspaceFolder}\\bin\\release\\Bounce-Game.exe"
             ]
          },
          {
