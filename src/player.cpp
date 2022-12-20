@@ -131,7 +131,7 @@ void Player::update(double deltaTime, bool mouseDown, bool mousePressed, std::ve
         SDL_GetMouseState(&mouseX, &mouseY); 
         setVelocity(getLaunch(initialMousePos, Vector2f(mouseX, mouseY)));
         
-        velocity = velocity / 300;
+        velocity = velocity / 600;
         velocity.x *= deltaTime;
         velocity.y *= deltaTime;
     }
@@ -156,7 +156,6 @@ void Player::update(double deltaTime, bool mouseDown, bool mousePressed, std::ve
         }
         
         /**Update position every frame**/
-        velocity.print();
         setPos(getPos() + velocity);
 
         if(abs(velocity.y) < 0.05) {

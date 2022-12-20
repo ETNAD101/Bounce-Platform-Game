@@ -15,7 +15,7 @@
 				"-I",
 				"${workspaceFolder}\\include",
 				"-I",
-				"H:\\dante\\Code\\Development\\SDL2\\SDL2-w64\\include"
+				"C:\\Dante\\Dev\\Development\\SDL2\\SDL2-w64\\include"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -33,7 +33,7 @@
 				"-o",
 				"${workspaceFolder}\\bin\\debug\\main",
 				"-L",
-				"H:\\dante\\Code\\Development\\SDL2\\SDL2-w64\\lib",
+				"C:\\Dante\\Dev\\Development\\SDL2\\SDL2-w64\\lib",
 				"-lmingw32",
 				"-lSDL2main",
 				"-lSDL2",
@@ -69,7 +69,7 @@
 				"-I",
 				"${workspaceFolder}\\include",
 				"-I",
-				"H:\\dante\\Code\\Development\\SDL2\\SDL2-w64\\include"
+				"C:\\Dante\\Dev\\Development\\SDL2\\SDL2-w64\\include"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -87,7 +87,7 @@
 				"-o",
 				"${workspaceFolder}\\bin\\release\\Bounce-Game",
 				"-L",
-				"H:\\dante\\Code\\Development\\SDL2\\SDL2-w64\\lib",
+				"C:\\Dante\\Dev\\Development\\SDL2\\SDL2-w64\\lib",
 				"-lmingw32",
                 "-mwindows",
                 "-static-libstdc++",

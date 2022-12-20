@@ -8,6 +8,7 @@
 #include "math.h"
 #include "entity.h"
 #include "player.h"
+#include "enemy.h"
 #include "platform.h"
 #include "settings.h"
 
@@ -21,12 +22,14 @@ RenderWindow window(TITLE, WIDTH, HEIGHT);
 
 Player player(Vector2f(WIDTH/4 - 8, HEIGHT/4 - 16), window.loadTexture(PLAYER_PATH));
 
+Enemy enemy(Vector2f(0, 0), window.loadTexture(DEBUG_PATH), 0, 50);
+
 /** Create platforms**/
 std::vector<Platform> platforms = 
 {
     Platform(Vector2f(50, 40), window.loadTexture(DEBUG_PATH), Vector2f(16, 72)),
     Platform(Vector2f(0, 150), window.loadTexture(DEBUG_PATH), Vector2f(72, 16)),
-
+    Platform(Vector2f(150, 150), window.loadTexture(DEBUG_PATH), Vector2f(100, 16))
 };
 
 SDL_Event event;
@@ -93,6 +96,7 @@ void update()
     deltaTime = (double)((NOW - LAST)*1000 / (double)SDL_GetPerformanceFrequency());
 
     player.update(deltaTime, mouseDown, mousePressed, platforms);
+    enemy.update(deltaTime, mouseDown, mousePressed);
 
 }
 
@@ -107,6 +111,7 @@ void graphics()
         window.render(p);
     }
     window.render(player);
+    window.render(enemy);
     window.display();
 }
 
